@@ -7,6 +7,7 @@ import string
 client = commands.Bot(command_prefix='*')
 client.remove_command('help')
 
+characterList = {}
 
 @client.event
 async def on_ready():
@@ -39,5 +40,25 @@ async def help(ctx):
 
     await recipient.send(embed=embed)
 
+@client.command(pass_context = True)
+async def new(ctx):
+    author = ctx.message.author
+    channel = ctx.message.channel
+    await channel.send("Hello! To create a new player, type **p**. To enter data for an enemy, type **e**")
+    print(author + " initiated command *new.")
+    msg = await client.wait_for("message", check = lambda message: message.author == ctx.author)
+    if msg.content.lower() == "p":
+        await channel.send("Enter the name, hp, ac, and stats (top -> down) of the character separated by spaces.")
+        msg = await client.wait_for("message", check = lambda message: message.author == ctx.author)
+        msg = map(list(str, msg.split()))
+        characterList[msg[0]] = {"health": int(msg[1]), 
+                                 "ac": int(msg[2]), 
+                                 "str": int(msg[3]), 
+                                 "dex": int(msg[4]), 
+                                 "con": int(msg[5]), 
+                                 "int": int(msg[6]), 
+                                 "wis": int(msg[7]), 
+                                 "chr": int(msg[8])}
+        await channel.send("New character: " + msg[0])
 
 client.run('Token')
