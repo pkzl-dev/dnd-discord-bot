@@ -162,7 +162,7 @@ async def combat(ctx):
     newInitDict = sorted(initDict.items(), key = lambda x: x[1], reverse=True)
 
     for key in newInitDict:
-        await channel.send(f"{str(key)}, it is your turn!")
+        await channel.send(f"{str(key[0])}, it is your turn!")
         await channel.send("Enter any changes in HP that resulted from your turn, e.g. \"Goblin 5\".")
         msg = await client.wait_for("message", check=lambda message: message.author == ctx.author)
 
